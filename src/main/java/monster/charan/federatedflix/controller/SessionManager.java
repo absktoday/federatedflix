@@ -26,6 +26,9 @@ package monster.charan.federatedflix.controller;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 
 /**
@@ -36,7 +39,11 @@ import java.io.Serializable;
 @SessionScoped
 public class SessionManager implements Serializable {
 
+    @Inject
+    UserManager userManager;
+
     private String userID;
+    private String password;
     private boolean loggedIn = false;
 
     @PostConstruct
@@ -46,7 +53,30 @@ public class SessionManager implements Serializable {
 
     public String login() {
         System.out.println("Logging in user: " + userID);
-        loggedIn = true;
+        if (!userManager.doesUserExist(userID)) {
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User does not exist."));
+            return "index";
+        }
+
+        if (userManager.checkPassword(userID, password)) {
+            loggedIn = true;
+            return "home?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Password incorrect."));
+            return "index";
+        }
+
+    }
+
+    public String register() {
+        System.out.println("Registering in user: " + userID);
+
+        if (userManager.doesUserExist(userID)) {
+            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already registered."));
+            return "index";
+        }
+
+        userManager.setUser(userID, password);
         return "home?faces-redirect=true";
     }
 
@@ -56,6 +86,14 @@ public class SessionManager implements Serializable {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isLoggedIn() {

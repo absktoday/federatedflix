@@ -9,18 +9,29 @@
     </h:head>
     <h:body>
         <div class="flex h-screen">
-            <div class="ui-fluid m-auto">
+            <div class="m-auto" style="max-width: 415px;">
                 <p:graphicImage name="federatedflix.png" library="images" styleClass="m-auto"/>
-                <h:form>
-                    <div class="field">
+                <h:form class="ui-fluid formgrid grid">
+                    <div class="field col-12">
                         <p:outputLabel for="@next" value="User ID"/>
                         <p:inputText id="userid" value="#{sessionManager.userID}"/>
                     </div>
-                    <div class="field">
+                    <div class="field col-12">
                         <p:outputLabel for="@next" value="Password"/>
-                        <p:password id="password" toggleMask="true" redisplay="true" styleClass="w-full"/>
+                        <p:password id="password" value="#{sessionManager.password}" toggleMask="true" redisplay="true" styleClass="w-full"/>
                     </div>
-                    <p:commandButton value="Login" styleClass="ui-button-danger" action="#{sessionManager.login()}"/>
+                    <div class="field col-12">
+                        <p:messages id="messages" showDetail="true">
+                            <p:autoUpdate/>
+                        </p:messages>
+                    </div>
+
+                    <div class="field col-6">
+                        <p:commandButton value="Login" styleClass="ui-button-danger" action="#{sessionManager.login()}" update="@form" />
+                    </div>
+                    <div class="field col-6">
+                        <p:commandButton value="Register" styleClass="ui-button-outlined ui-button-danger" action="#{sessionManager.register()}" update="@form" />
+                    </div>
                 </h:form>
             </div> 
         </div>
