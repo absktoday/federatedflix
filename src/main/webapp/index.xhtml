@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Federated Flix</title>
+        <h:outputStylesheet library="css" name="global.css" />
+    </h:head>
+    <h:body>
+        <div class="flex h-screen">
+            <div class="ui-fluid m-auto">
+                <p:graphicImage name="federatedflix.png" library="images" styleClass="m-auto"/>
+                <h:form>
+                    <div class="field">
+                        <p:outputLabel for="@next" value="User ID"/>
+                        <p:inputText id="userid" value="#{sessionManager.userID}"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="@next" value="Password"/>
+                        <p:password id="password" toggleMask="true" redisplay="true" styleClass="w-full"/>
+                    </div>
+                    <p:commandButton value="Login" styleClass="ui-button-danger" action="#{sessionManager.login()}"/>
+                </h:form>
+            </div> 
+        </div>
+
+    </h:body>
+</html>
