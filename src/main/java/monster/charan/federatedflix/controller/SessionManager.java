@@ -29,12 +29,15 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author Charan
- */
 @Named(value = "sessionManager")
 @SessionScoped
 public class SessionManager implements Serializable {
@@ -42,8 +45,16 @@ public class SessionManager implements Serializable {
     @Inject
     UserManager userManager;
 
+    @Email
+    @NotBlank
     private String userID;
+
+    @NotBlank
+//    @Pattern(regexp = "^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=])(?=\\S+$).{8,20}$", message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character and no whitespace")
     private String password;
+
+    private String randomUserID;
+
     private boolean loggedIn = false;
 
     @PostConstruct
@@ -54,15 +65,25 @@ public class SessionManager implements Serializable {
     public String login() {
         System.out.println("Logging in user: " + userID);
         if (!userManager.doesUserExist(userID)) {
-            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User does not exist."));
+            FacesContext.getCurrentInstance().addMessage("auth-form", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User does not exist."));
             return "index";
         }
 
         if (userManager.checkPassword(userID, password)) {
             loggedIn = true;
+
+            // create a new Random object
+            Random rand = new Random();
+
+            // generate a random integer between 0 and 6039
+            int randomNum = rand.nextInt(6040);
+
+            // convert the random integer to a string
+            randomUserID = String.valueOf(randomNum);
+
             return "home?faces-redirect=true";
         } else {
-            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Password incorrect."));
+            FacesContext.getCurrentInstance().addMessage("auth-form", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Password incorrect."));
             return "index";
         }
 
@@ -72,12 +93,32 @@ public class SessionManager implements Serializable {
         System.out.println("Registering in user: " + userID);
 
         if (userManager.doesUserExist(userID)) {
-            FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already registered."));
+            FacesContext.getCurrentInstance().addMessage("auth-form", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already registered."));
             return "index";
         }
 
+        // create a new Random object
+        Random rand = new Random();
+
+        // generate a random integer between 0 and 6039
+        int randomNum = rand.nextInt(6040);
+
+        // convert the random integer to a string
+        randomUserID = String.valueOf(randomNum);
+
         userManager.setUser(userID, password);
         return "home?faces-redirect=true";
+    }
+
+    public void signOut() {
+        System.out.println("Signing Out");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect("index");
+        } catch (IOException ex) {
+            Logger.getLogger(SessionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //        return "/index?faces-redirect=true";
     }
 
     public String getUserID() {
@@ -98,6 +139,14 @@ public class SessionManager implements Serializable {
 
     public boolean isLoggedIn() {
         return loggedIn;
+    }
+
+    public String getRandomUserID() {
+        return randomUserID;
+    }
+
+    public void setRandomUserID(String randomUserID) {
+        this.randomUserID = randomUserID;
     }
 
 }

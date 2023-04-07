@@ -4,13 +4,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /**
  * App controller to share state across all application users.

@@ -8,28 +8,27 @@
 
     <ui:composition> 
         <h:form>
-            <h:form>
-                <p:menubar>
-                    <p:menuitem outcome="/home">
-                        <div class="flex align-items-center">
-                            <!--                            <img
-                                                            src="https://www.smartflix.com/resources/smartflix-logo.png"
-                                                            alt="logo"
-                                                            class="w-10rem"
-                                                            />-->
-                            <p:graphicImage name="federatedflix.png" library="images"
-                                            styleClass="w-15rem"/>
-                        </div>
+            <p:menubar>
+                <p:menuitem outcome="/home">
+                    <div class="flex align-items-center">
+                        <!--                            <img
+                                                        src="https://www.smartflix.com/resources/smartflix-logo.png"
+                                                        alt="logo"
+                                                        class="w-10rem"
+                                                        />-->
+                        <p:graphicImage name="federatedflix.png" library="images"
+                                        styleClass="w-15rem"/>
+                    </div>
 
-                    </p:menuitem>
+                </p:menuitem>
 
-                    <f:facet name="options">
-                        <div class="flex align-items-center h-4rem theme-toggle-button">
-                            <p:button value="About" styleClass="ui-button-danger ui-button-flat" outcome="/about"/>
-                        </div>
-                    </f:facet>
-                </p:menubar>
-            </h:form>
+                <f:facet name="options">
+                    <div class="flex align-items-center h-4rem theme-toggle-button">
+                        <p:button value="About" styleClass="ui-button-danger ui-button-flat" outcome="/about"/>
+                        <p:commandButton value="Sign Out" styleClass="ui-button-outlined ui-button-danger" icon="pi pi-fw pi-sign-out" action="#{sessionManager.signOut()}" />
+                    </div>
+                </f:facet>
+            </p:menubar>
         </h:form>
     </ui:composition>
 </html>

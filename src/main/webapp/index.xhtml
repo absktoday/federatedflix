@@ -11,26 +11,24 @@
         <div class="flex h-screen">
             <div class="m-auto" style="max-width: 415px;">
                 <p:graphicImage name="federatedflix.png" library="images" styleClass="m-auto"/>
-                <h:form class="ui-fluid formgrid grid">
+                <h:form id="auth-form" class="ui-fluid formgrid grid">
+                    <p:growl id="growl" showDetail="true" for="auth-form"/>
                     <div class="field col-12">
                         <p:outputLabel for="@next" value="User ID"/>
                         <p:inputText id="userid" value="#{sessionManager.userID}"/>
+                        <p:message for="@previous" />
                     </div>
                     <div class="field col-12">
                         <p:outputLabel for="@next" value="Password"/>
                         <p:password id="password" value="#{sessionManager.password}" toggleMask="true" redisplay="true" styleClass="w-full"/>
-                    </div>
-                    <div class="field col-12">
-                        <p:messages id="messages" showDetail="true">
-                            <p:autoUpdate/>
-                        </p:messages>
+                        <p:message for="@previous" />
                     </div>
 
                     <div class="field col-6">
-                        <p:commandButton value="Login" styleClass="ui-button-danger" action="#{sessionManager.login()}" update="@form" />
+                        <p:commandButton id="login-button" value="Sign In" styleClass="ui-button-danger" action="#{sessionManager.login()}" validateClient="true" update="@form" />
                     </div>
                     <div class="field col-6">
-                        <p:commandButton value="Register" styleClass="ui-button-outlined ui-button-danger" action="#{sessionManager.register()}" update="@form" />
+                        <p:commandButton id="register-button" value="Register" styleClass="ui-button-outlined ui-button-danger" action="#{sessionManager.register()}" validateClient="true" update="@form" />
                     </div>
                 </h:form>
             </div> 

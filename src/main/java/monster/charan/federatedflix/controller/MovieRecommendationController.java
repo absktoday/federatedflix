@@ -23,6 +23,7 @@
  */
 package monster.charan.federatedflix.controller;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -48,17 +49,28 @@ public class MovieRecommendationController implements Serializable {
     @Inject
     App app;
 
+    @Inject
+    SessionManager sessionManager;
+
     private String clientID;
     private ArrayList<String> movieRecs = new ArrayList<>();
     private ArrayList<Movie> movies = new ArrayList<>();
+    private boolean loading = false;
+
     OkHttpClient client = new OkHttpClient().newBuilder()
             .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
             .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
             .build();
 
+    @PostConstruct
+    public void init() {
+//        getmovies();
+    }
+
     public void getmovies() {
+        loading = true;
         Request request = new Request.Builder()
-                .url("http://localhost:5000/getrec/" + clientID)
+                .url("http://localhost:5000/getrec/" + sessionManager.getRandomUserID())
                 .get()
                 .build();
         try {
@@ -69,7 +81,7 @@ public class MovieRecommendationController implements Serializable {
             System.out.println("Movies Resp:");
             System.out.println(movieResp);
             String result = movieResp.substring(1, movieResp.length() - 1);
-            movieRecs = new ArrayList<>(Arrays.asList(result.split(",")));
+            movieRecs = new ArrayList<String>(Arrays.asList(result.split(",")));
 
             for (String movieID : movieRecs) {
                 movies.add(new Movie(movieID, app.getMovieData().get(movieID)));
@@ -78,6 +90,7 @@ public class MovieRecommendationController implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
+        loading = false;
     }
 
     public String getClientID() {
@@ -94,6 +107,14 @@ public class MovieRecommendationController implements Serializable {
 
     public ArrayList<Movie> getMovies() {
         return movies;
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
     }
 
 }
