@@ -24,8 +24,13 @@
 
                 <f:facet name="options">
                     <div class="flex align-items-center h-4rem theme-toggle-button">
+                        <p:button icon="pi pi-github" styleClass="rounded-button ui-button-flat" href="https://github.com/Ach113/federeco" target="_blank"/>
                         <p:button value="About" styleClass="ui-button-flat" outcome="/about"/>
                         <p:commandButton value="Sign Out" styleClass="ui-button-outlined" icon="pi pi-fw pi-sign-out" action="#{sessionManager.signOut()}" />
+                        <p:commandButton action="#{themeManager.toggleTheme()}"
+                                         icon="pi pi-${themeManager.themeIcon}"
+                                         update="@this"
+                                         styleClass="ml-6 rounded-button surface-900 border-none text-0"/>
                     </div>
                 </f:facet>
             </p:menubar>

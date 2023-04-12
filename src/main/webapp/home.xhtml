@@ -22,9 +22,11 @@
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 pr-6">
-                    <span class="text-2xl font-semibold">Recommended Movies</span>
-                    <h:form id="ratings-table" styleClass="mt-2">
+                <div class="col-12 md:col-6 md:pr-6">
+                    <div class="flex justify-content-center">
+                        <span class="text-2xl font-semibold gradient-sub-text" style="width: fit-content;">Recommended Movies</span>
+                    </div>
+                    <h:form id="ratings-table" styleClass="mt-4">
                         <p:remoteCommand name="rc" update="@form" action="#{moviesRecController.getmovies()}"/>
                         <p:outputPanel rendered="#{moviesRecController.isLoading()}">
                             <p:skeleton styleClass="w-full h-4rem mb-1" />
@@ -46,9 +48,11 @@
                     </h:form>
 
                 </div>
-                <div class="col-12 md:col-6 pl-6">
-                    <span class="text-2xl font-semibold">Previous Ratings</span>
-                    <h:form id="previous-ratings-table"  styleClass="mt-2">
+                <div class="col-12 md:col-6 md:pl-6">
+                    <div class="flex justify-content-center">
+                        <span class="text-2xl font-semibold gradient-sub-text" style="width: fit-content;">Previous Ratings</span>
+                    </div>
+                    <h:form id="previous-ratings-table"  styleClass="mt-4">
                         <p:dataTable var="entry" 
                                      value="#{userMovieRatingsController.previousMovieRatingsList}"
                                      scrollable="true" scrollHeight="644">
