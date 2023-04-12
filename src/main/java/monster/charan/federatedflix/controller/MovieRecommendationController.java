@@ -37,6 +37,7 @@ import monster.charan.federatedflix.model.Movie;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -67,7 +68,13 @@ public class MovieRecommendationController implements Serializable {
 //        getmovies();
     }
 
+    public void callGetMovies() {
+        System.out.println("Calling Get Movies!");
+        getmovies();
+    }
+
     public void getmovies() {
+        System.out.println("Get Movies called");
         loading = true;
         Request request = new Request.Builder()
                 .url("http://localhost:5000/getrec/" + sessionManager.getRandomUserID())
@@ -86,11 +93,14 @@ public class MovieRecommendationController implements Serializable {
             for (String movieID : movieRecs) {
                 movies.add(new Movie(movieID, app.getMovieData().get(movieID)));
             }
+            System.out.println("Updating");
+            PrimeFaces.current().ajax().update("ratings-table");
 
         } catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
         loading = false;
+        System.out.println("Done");
     }
 
     public String getClientID() {

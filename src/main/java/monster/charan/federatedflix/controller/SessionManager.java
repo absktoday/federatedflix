@@ -50,10 +50,11 @@ public class SessionManager implements Serializable {
     private String userID;
 
     @NotBlank
-//    @Pattern(regexp = "^(?=.[0-9])(?=.[a-z])(?=.[A-Z])(?=.[@#$%^&+=])(?=\\S+$).{8,20}$", message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character and no whitespace")
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", message = "Password must contain at least one uppercase letter, one lowercase letter, one digit, one special character and no whitespace")
     private String password;
 
     private String randomUserID;
+    private int randomUserDataNo;
 
     private boolean loggedIn = false;
 
@@ -62,6 +63,20 @@ public class SessionManager implements Serializable {
         System.out.println("Session started");
     }
 
+    /**
+     * Attempts to login the user with the given userID and password.
+     *
+     * @return A string representing the outcome of the login attempt.
+     *
+     * If the login is successful, the user is redirected to the home page. If
+     * the userID is invalid, the user is redirected to the index page with an
+     * error message indicating that the user does not exist. If the password is
+     * incorrect, the user is redirected to the index page with an error message
+     * indicating that the password is incorrect. This method also generates a
+     * random userID if the login is successful and sets the loggedIn property
+     * to true.
+     *
+     */
     public String login() {
         System.out.println("Logging in user: " + userID);
         if (!userManager.doesUserExist(userID)) {
@@ -77,6 +92,7 @@ public class SessionManager implements Serializable {
 
             // generate a random integer between 0 and 6039
             int randomNum = rand.nextInt(6040);
+            randomUserDataNo = randomNum + 1;
 
             // convert the random integer to a string
             randomUserID = String.valueOf(randomNum);
@@ -89,6 +105,10 @@ public class SessionManager implements Serializable {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public String register() {
         System.out.println("Registering in user: " + userID);
 
@@ -102,6 +122,7 @@ public class SessionManager implements Serializable {
 
         // generate a random integer between 0 and 6039
         int randomNum = rand.nextInt(6040);
+        randomUserDataNo = randomNum + 1;
 
         // convert the random integer to a string
         randomUserID = String.valueOf(randomNum);
@@ -110,6 +131,9 @@ public class SessionManager implements Serializable {
         return "home?faces-redirect=true";
     }
 
+    /**
+     *
+     */
     public void signOut() {
         System.out.println("Signing Out");
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -147,6 +171,10 @@ public class SessionManager implements Serializable {
 
     public void setRandomUserID(String randomUserID) {
         this.randomUserID = randomUserID;
+    }
+
+    public int getRandomUserDataNo() {
+        return randomUserDataNo;
     }
 
 }

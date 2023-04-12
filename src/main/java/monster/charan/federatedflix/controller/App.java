@@ -58,7 +58,7 @@ public class App {
                 movieData.put(key, value);
 
                 // Print the key-value pair
-                System.out.println(key + " -> " + value);
+//                System.out.println(key + " -> " + value);
             }
         } catch (IOException e) {
             System.out.println("File not found: " + e.getLocalizedMessage());
