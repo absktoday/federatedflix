@@ -8,49 +8,35 @@
 
         <ui:define name = "content">
 
-            <h:form>
-                <h:commandButton id="myButton" value="Click me" action="#{moviesRecController.callGetMovies()}" />
-            </h:form>
-
             <script>
                 $(document).ready(function () {
-                    $('#myButton').click(function () {
-                        $.ajax({
-                            type: 'POST',
-                            url: '#{moviesRecController.callGetMovies()}',
-                            success: function () {
-                                console.log('Function executed successfully');
-                            },
-                            error: function () {
-                                console.error('Error executing function');
-                            }
-                        });
-                    });
+                    rc();
                 });
             </script>
 
-
-            <h:form>
-                <div class="w-20rem m-auto">
-                    <div class="ui-fluid mb-4">
-                        <div class="field">
-                            <p:outputLabel for="@next" value="Enter User ID"/>
-                            <p:inputText id="clientid-label" value="#{moviesRecController.clientID}"/>
-                        </div>
-                        <p:commandButton value="Get Movies" action="#{moviesRecController.getmovies()}"  styleClass="ui-button-danger" update="ratings-table"/>
+            <div class="wrapper grid mt-4">
+                <div class="col-12  mb-6">
+                    <div class="flex flex-column gap-3">
+                        <span class="text-6xl font-semibold gradient-text w-min">Welcome</span>
+                        <span class="text-4xl font-semibold gradient-text" style="width: fit-content;">User ##{sessionManager.randomUserID}</span>
                     </div>
                 </div>
-            </h:form>
 
-
-
-            <div class="wrapper grid">
-                <div class="col-12 md:col-6">
+                <div class="col-12 md:col-6 pr-6">
                     <span class="text-2xl font-semibold">Recommended Movies</span>
                     <h:form id="ratings-table" styleClass="mt-2">
-                        <p:dataTable var="movie" value="#{moviesRecController.movies}">
-                            <p:column headerText="Movie ID">
-                                <h:outputText value="#{movie.movieID}"/>
+                        <p:remoteCommand name="rc" update="@form" action="#{moviesRecController.getmovies()}"/>
+                        <p:outputPanel rendered="#{moviesRecController.isLoading()}">
+                            <p:skeleton styleClass="w-full h-4rem mb-1" />
+                            <p:skeleton styleClass="w-full h-4rem mb-1" />
+                            <p:skeleton styleClass="w-full h-4rem mb-1" />
+                            <p:skeleton styleClass="w-full h-4rem mb-1" />
+                            <p:skeleton styleClass="w-full h-4rem mb-1" />
+                        </p:outputPanel>
+
+                        <p:dataTable var="movie" value="#{moviesRecController.movies}" rendered="#{not moviesRecController.isLoading()}">
+                            <p:column headerText="Movie ID" >
+                                <h:outputText value="#{movie.movieID}" />
                             </p:column>
 
                             <p:column headerText="Movie">
@@ -60,10 +46,12 @@
                     </h:form>
 
                 </div>
-                <div class="col-12 md:col-6">
+                <div class="col-12 md:col-6 pl-6">
                     <span class="text-2xl font-semibold">Previous Ratings</span>
                     <h:form id="previous-ratings-table"  styleClass="mt-2">
-                        <p:dataTable var="entry" value="#{userMovieRatingsController.previousMovieRatingsList}">
+                        <p:dataTable var="entry" 
+                                     value="#{userMovieRatingsController.previousMovieRatingsList}"
+                                     scrollable="true" scrollHeight="644">
                             <p:column headerText="Movie">
                                 #{entry.key}
                             </p:column>

@@ -25,10 +25,10 @@
                     </div>
 
                     <div class="field col-6">
-                        <p:commandButton id="login-button" value="Sign In" styleClass="ui-button-danger" action="#{sessionManager.login()}" validateClient="true" update="@form" />
+                        <p:commandButton id="login-button" value="Sign In" action="#{sessionManager.login()}" validateClient="true" update="@form" />
                     </div>
                     <div class="field col-6">
-                        <p:commandButton id="register-button" value="Register" styleClass="ui-button-outlined ui-button-danger" action="#{sessionManager.register()}" validateClient="true" update="@form" />
+                        <p:commandButton id="register-button" value="Register" styleClass="ui-button-outlined" action="#{sessionManager.register()}" validateClient="true" update="@form" />
                     </div>
                 </h:form>
             </div> 

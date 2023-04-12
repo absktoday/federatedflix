@@ -56,7 +56,7 @@ public class MovieRecommendationController implements Serializable {
     private String clientID;
     private ArrayList<String> movieRecs = new ArrayList<>();
     private ArrayList<Movie> movies = new ArrayList<>();
-    private boolean loading = false;
+    private boolean loading = true;
 
     OkHttpClient client = new OkHttpClient().newBuilder()
             .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
@@ -66,11 +66,6 @@ public class MovieRecommendationController implements Serializable {
     @PostConstruct
     public void init() {
 //        getmovies();
-    }
-
-    public void callGetMovies() {
-        System.out.println("Calling Get Movies!");
-        getmovies();
     }
 
     public void getmovies() {
@@ -93,8 +88,6 @@ public class MovieRecommendationController implements Serializable {
             for (String movieID : movieRecs) {
                 movies.add(new Movie(movieID, app.getMovieData().get(movieID)));
             }
-            System.out.println("Updating");
-            PrimeFaces.current().ajax().update("ratings-table");
 
         } catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
